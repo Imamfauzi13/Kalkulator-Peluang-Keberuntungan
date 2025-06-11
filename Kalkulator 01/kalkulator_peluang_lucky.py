@@ -8,7 +8,6 @@ Original file is located at
 """
 
 !pip install streamlit pyngrok --quiet
-
 kode = """
 import tkinter as tk
 from tkinter import messagebox
@@ -66,15 +65,4 @@ label_hasil = tk.Label(frame, text="Peluang (nCr): ")
 label_hasil.grid(row=3, column=0, columnspan=2)
 
 root.mainloop()
-
-!ngrok config add-authtoken 2uzt3zck7DsFcgSphPuyEpHgUiN_3gijm7UyXNThGByqVsBhA
-
-from pyngrok import ngrok
-
-# Jalankan streamlit sebagai background process
-!streamlit run bmi_app.py &>/dev/null &
-
-# Hubungkan ke Streamlit via ngrok (versi baru)
-public_url = ngrok.connect(addr="8533", proto="http")
-print("Aplikasi bisa diakses di link berikut:")
-print(public_url)
+"""  # <-- penutup string triple-quote
