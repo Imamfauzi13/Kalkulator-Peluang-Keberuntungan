@@ -8,61 +8,30 @@ Original file is located at
 """
 
 !pip install streamlit pyngrok --quiet
-kode = """
-import tkinter as tk
-from tkinter import messagebox
+import streamlit as st
 from math import comb
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
-def hitung_peluang():
-    try:
-        n = int(entry_n.get())
-        r = int(entry_r.get())
-        if r > n or n < 0 or r < 0:
-            raise ValueError
+st.set_page_config(page_title="Kalkulator Peluang (nCr)", layout="centered")
+
+st.title("🎲 Kalkulator Peluang (nCr) dengan Visualisasi")
+
+# Input nilai n dan r
+n = st.number_input("Masukkan nilai n (≥ 0):", min_value=0, step=1)
+r = st.number_input("Masukkan nilai r (≥ 0):", min_value=0, step=1)
+
+# Hitung dan tampilkan hasil jika tombol diklik
+if st.button("Hitung Peluang"):
+    if r > n:
+        st.error("Nilai r tidak boleh lebih besar dari n.")
+    else:
         hasil = comb(n, r)
-        label_hasil.config(text=f"Peluang (nCr): {hasil}")
-        animasi_peluang(hasil)
-    except ValueError:
-        messagebox.showerror("Input Error", "Masukkan nilai n dan r yang valid (n ≥ r ≥ 0)")
+        st.success(f"Peluang (nCr): {hasil}")
 
-def animasi_peluang(hasil):
-    fig, ax = plt.subplots()
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, hasil * 1.1)
-    bar = ax.bar(0.5, 0, width=0.3, color='skyblue')
+        # Visualisasi batang sederhana
+        fig, ax = plt.subplots()
+        ax.bar(["nCr"], [hasil], color='skyblue')
+        ax.set_ylabel("Nilai nCr")
+        ax.set_title("Visualisasi Peluang (nCr)")
+        st.pyplot(fig)
 
-    def update(frame):
-        bar[0].set_height(frame)
-        return bar
-
-    ani = FuncAnimation(fig, update, frames=range(hasil + 1), interval=50, repeat=False)
-    plt.title("Animasi Peluang (nCr)")
-    plt.xticks([])
-    plt.ylabel("Nilai nCr")
-    plt.show()
-
-# Membuat GUI dengan Tkinter
-root = tk.Tk()
-root.title("Kalkulator Peluang (nCr) dengan Animasi")
-
-frame = tk.Frame(root, padx=10, pady=10)
-frame.pack()
-
-tk.Label(frame, text="Masukkan nilai n:").grid(row=0, column=0, sticky="e")
-entry_n = tk.Entry(frame)
-entry_n.grid(row=0, column=1)
-
-tk.Label(frame, text="Masukkan nilai r:").grid(row=1, column=0, sticky="e")
-entry_r = tk.Entry(frame)
-entry_r.grid(row=1, column=1)
-
-btn_hitung = tk.Button(frame, text="Hitung Peluang", command=hitung_peluang)
-btn_hitung.grid(row=2, column=0, columnspan=2, pady=10)
-
-label_hasil = tk.Label(frame, text="Peluang (nCr): ")
-label_hasil.grid(row=3, column=0, columnspan=2)
-
-root.mainloop()
-"""  # <-- penutup string triple-quote
